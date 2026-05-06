@@ -1,0 +1,346 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Base Reset ─────────────────────────────────────────── */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #050505;
+  --primary: #00D4FF;
+  --secondary: #7C3AED;
+  --accent: #F59E0B;
+  --success: #10B981;
+  --text: #ffffff;
+  --text-muted: rgba(255,255,255,0.5);
+  --surface: #0D0D0D;
+  --surface-light: #161616;
+  --border: rgba(255,255,255,0.06);
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Custom Scrollbar ───────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary);
+}
+
+/* ─── Selection ──────────────────────────────────────────── */
+::selection {
+  background: rgba(0, 212, 255, 0.3);
+  color: white;
+}
+
+/* ─── Typography ─────────────────────────────────────────── */
+.font-orbitron { font-family: 'Orbitron', sans-serif; }
+.font-inter { font-family: 'Inter', sans-serif; }
+
+/* ─── Glassmorphism ──────────────────────────────────────── */
+.glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.glass-strong {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ─── Gradient Text ──────────────────────────────────────── */
+.gradient-text {
+  background: linear-gradient(135deg, #00D4FF 0%, #7C3AED 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-gold {
+  background: linear-gradient(135deg, #F59E0B 0%, #EF4444 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── Neon Borders ───────────────────────────────────────── */
+.neon-border-blue {
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  box-shadow: 0 0 10px rgba(0, 212, 255, 0.1), inset 0 0 10px rgba(0, 212, 255, 0.05);
+}
+
+.neon-border-purple {
+  border: 1px solid rgba(124, 58, 237, 0.3);
+  box-shadow: 0 0 10px rgba(124, 58, 237, 0.1), inset 0 0 10px rgba(124, 58, 237, 0.05);
+}
+
+/* ─── Buttons ────────────────────────────────────────────── */
+.btn-primary {
+  @apply relative overflow-hidden px-8 py-3 rounded-lg font-orbitron font-semibold text-sm tracking-widest uppercase transition-all duration-300;
+  background: linear-gradient(135deg, #00D4FF, #7C3AED);
+  color: white;
+}
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%; width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s;
+}
+.btn-primary:hover::before { left: 100%; }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,212,255,0.3); }
+.btn-primary:active { transform: translateY(0) scale(0.97); }
+
+.btn-outline {
+  @apply px-8 py-3 rounded-lg font-orbitron font-semibold text-sm tracking-widest uppercase transition-all duration-300;
+  background: transparent;
+  border: 1px solid rgba(0, 212, 255, 0.5);
+  color: #00D4FF;
+}
+.btn-outline:hover {
+  background: rgba(0, 212, 255, 0.1);
+  border-color: #00D4FF;
+  box-shadow: 0 0 20px rgba(0,212,255,0.2);
+  transform: translateY(-2px);
+}
+
+.btn-ghost {
+  @apply px-6 py-2 rounded-lg font-inter font-medium text-sm transition-all duration-200;
+  color: rgba(255,255,255,0.7);
+}
+.btn-ghost:hover { color: white; background: rgba(255,255,255,0.05); }
+
+/* ─── Section Layout ─────────────────────────────────────── */
+.section-padding {
+  @apply py-24 px-6 md:px-12 lg:px-20;
+}
+
+.container-max {
+  @apply max-w-7xl mx-auto;
+}
+
+/* ─── Cards ──────────────────────────────────────────────── */
+.card {
+  @apply rounded-2xl overflow-hidden transition-all duration-300;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+.card:hover {
+  border-color: rgba(0, 212, 255, 0.2);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+
+/* ─── Skill Bar ──────────────────────────────────────────── */
+.skill-bar {
+  @apply relative h-2 rounded-full overflow-hidden;
+  background: rgba(255,255,255,0.05);
+}
+
+.skill-fill {
+  @apply absolute left-0 top-0 h-full rounded-full;
+  background: linear-gradient(90deg, #00D4FF, #7C3AED);
+  transition: width 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* ─── Timeline ───────────────────────────────────────────── */
+.timeline-line {
+  @apply absolute left-6 top-0 bottom-0 w-px;
+  background: linear-gradient(to bottom, #00D4FF, #7C3AED, transparent);
+}
+
+/* ─── Lightbox ───────────────────────────────────────────── */
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.95);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ─── Noise Texture ──────────────────────────────────────── */
+.noise::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  opacity: 0.03;
+  z-index: 9998;
+}
+
+/* ─── Grid Background ────────────────────────────────────── */
+.grid-bg {
+  background-image: 
+    linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* ─── Animated Glow ──────────────────────────────────────── */
+.glow-blue {
+  filter: drop-shadow(0 0 8px rgba(0,212,255,0.6));
+}
+
+.glow-purple {
+  filter: drop-shadow(0 0 8px rgba(124,58,237,0.6));
+}
+
+/* ─── Tag / Badge ────────────────────────────────────────── */
+.tech-tag {
+  @apply px-3 py-1 rounded-full text-xs font-inter font-medium;
+  background: rgba(0, 212, 255, 0.1);
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  color: #00D4FF;
+}
+
+.category-badge {
+  @apply px-3 py-1 rounded-full text-xs font-orbitron font-semibold uppercase tracking-wider;
+  background: rgba(124, 58, 237, 0.15);
+  border: 1px solid rgba(124, 58, 237, 0.3);
+  color: #a78bfa;
+}
+
+/* ─── Admin Sidebar ──────────────────────────────────────── */
+.sidebar-link {
+  @apply flex items-center gap-3 px-4 py-3 rounded-xl font-inter font-medium text-sm transition-all duration-200;
+  color: rgba(255,255,255,0.5);
+}
+.sidebar-link:hover {
+  background: rgba(0,212,255,0.08);
+  color: #00D4FF;
+}
+.sidebar-link.active {
+  background: rgba(0,212,255,0.12);
+  color: #00D4FF;
+  border-left: 2px solid #00D4FF;
+}
+
+/* ─── Scroll Progress Bar ────────────────────────────────── */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #00D4FF, #7C3AED, #F59E0B);
+  z-index: 9999;
+  transform-origin: left;
+}
+
+/* ─── Three.js Canvas Wrapper ────────────────────────────── */
+.three-canvas-wrapper {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: all;
+  cursor: grab;
+}
+.three-canvas-wrapper:active { cursor: grabbing; }
+
+/* ─── Hero radial vignette — keeps text readable ─────────── */
+.hero-gradient {
+  background: radial-gradient(
+    ellipse 60% 60% at 50% 50%,
+    transparent 20%,
+    rgba(5, 5, 5, 0.35) 65%,
+    rgba(5, 5, 5, 0.75) 100%
+  );
+  z-index: 1;
+}
+
+/* ─── Form Inputs ────────────────────────────────────────── */
+.input-field {
+  @apply w-full px-4 py-3 rounded-xl font-inter text-sm transition-all duration-200 outline-none;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: white;
+}
+.input-field:focus {
+  border-color: rgba(0,212,255,0.5);
+  background: rgba(0,212,255,0.04);
+  box-shadow: 0 0 0 3px rgba(0,212,255,0.1);
+}
+.input-field::placeholder { color: rgba(255,255,255,0.3); }
+
+/* ─── Loading Animation ──────────────────────────────────── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+/* ─── Project Image Hover ────────────────────────────────── */
+.project-img-wrapper {
+  @apply relative overflow-hidden;
+  cursor: pointer;
+}
+.project-img-wrapper img {
+  @apply w-full h-full object-cover transition-transform duration-500;
+}
+.project-img-wrapper:hover img {
+  transform: scale(1.05);
+}
+.project-img-overlay {
+  @apply absolute inset-0 flex flex-col items-center justify-center opacity-0 transition-opacity duration-300;
+  background: linear-gradient(135deg, rgba(0,212,255,0.85) 0%, rgba(124,58,237,0.85) 100%);
+}
+.project-img-wrapper:hover .project-img-overlay {
+  opacity: 1;
+}
+
+/* ─── Cursor Glow ─────────────────────────────────────────── */
+.cursor-glow {
+  pointer-events: none;
+  position: fixed;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,212,255,0.08) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  transition: transform 0.1s ease;
+}
+
+/* ─── Responsive Canvas ──────────────────────────────────── */
+canvas { touch-action: none; }
