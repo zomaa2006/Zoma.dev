@@ -61,7 +61,7 @@ export default function Dashboard() {
 
   return (
     <AdminLayout>
-      <div className="p-8">
+      <div className="p-4 md:p-8">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -69,7 +69,7 @@ export default function Dashboard() {
           className="mb-10"
         >
           <p className="font-inter text-white/30 text-sm mb-1">{greeting}, 👋</p>
-          <h1 className="font-orbitron font-black text-3xl text-white">
+          <h1 className="font-orbitron font-black text-2xl md:text-3xl text-white">
             {user?.displayName?.split(' ')[0] || 'Hazem'}{' '}
             <span className="gradient-text">Dashboard</span>
           </h1>

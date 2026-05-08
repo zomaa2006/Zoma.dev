@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { updateProfile } from 'firebase/auth';
+import { updateProfile, updatePassword, EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
-import { FiUpload, FiDownload, FiTrash2, FiCheck, FiFileText, FiEdit3, FiSave } from 'react-icons/fi';
+import { FiUpload, FiDownload, FiTrash2, FiCheck, FiFileText, FiEdit3, FiSave, FiLock, FiEye, FiEyeOff } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import AdminLayout from '../../components/admin/AdminLayout';
 import { useAuth } from '../../hooks/useAuth';
@@ -115,6 +115,11 @@ export default function AdminSettings() {
   });
   const [savingDesc, setSavingDesc] = useState(false);
 
+  // ── Password Change ────────────────────────────────────────────────────────
+  const [pwForm, setPwForm] = useState({ current: '', next: '', confirm: '' });
+  const [showPw, setShowPw] = useState({ current: false, next: false, confirm: false });
+  const [savingPw, setSavingPw] = useState(false);
+
   // Load saved data from Firestore on mount
   useEffect(() => {
     getDoc(doc(db, 'settings', 'cv')).then(d => {
@@ -182,9 +187,37 @@ export default function AdminSettings() {
     }
   };
 
+  const handlePasswordChange = async (e) => {
+    e.preventDefault();
+    if (pwForm.next !== pwForm.confirm) {
+      toast.error('New passwords do not match.');
+      return;
+    }
+    if (pwForm.next.length < 6) {
+      toast.error('Password must be at least 6 characters.');
+      return;
+    }
+    setSavingPw(true);
+    try {
+      const credential = EmailAuthProvider.credential(user.email, pwForm.current);
+      await reauthenticateWithCredential(user, credential);
+      await updatePassword(user, pwForm.next);
+      toast.success('Password updated successfully! 🔒');
+      setPwForm({ current: '', next: '', confirm: '' });
+    } catch (err) {
+      const msg = err.code === 'auth/wrong-password' ? 'Current password is incorrect.' :
+                  err.code === 'auth/invalid-credential' ? 'Current password is incorrect.' :
+                  err.code === 'auth/too-many-requests' ? 'Too many attempts. Try again later.' :
+                  'Failed to update password. Try logging out and back in.';
+      toast.error(msg);
+    } finally {
+      setSavingPw(false);
+    }
+  };
+
   return (
     <AdminLayout>
-      <div className="p-8 max-w-2xl">
+      <div className="p-4 md:p-8 max-w-2xl">
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
           <h1 className="font-orbitron font-black text-2xl text-white mb-1">
             <span className="gradient-text">Settings</span>
@@ -353,6 +386,56 @@ export default function AdminSettings() {
               whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
               className="btn-primary text-xs px-6 py-2.5 disabled:opacity-60">
               {savingProfile ? 'Saving...' : 'Save Profile'}
+            </motion.button>
+          </form>
+        </motion.div>
+
+        {/* ── Change Password ─────────────────────────────────────────── */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
+          className="glass rounded-2xl p-6 mb-6 border border-red-500/10"
+        >
+          <div className="flex items-center gap-3 mb-5">
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center"
+              style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.25)' }}>
+              <FiLock size={16} className="text-red-400" />
+            </div>
+            <div>
+              <h2 className="font-orbitron font-bold text-white text-base">Change Password</h2>
+              <p className="font-inter text-white/30 text-xs">Update your admin login password</p>
+            </div>
+          </div>
+
+          <form onSubmit={handlePasswordChange} className="space-y-4">
+            {[{ key: 'current', label: 'Current Password', placeholder: 'Enter current password' },
+              { key: 'next',    label: 'New Password',     placeholder: 'Min. 6 characters' },
+              { key: 'confirm', label: 'Confirm New Password', placeholder: 'Repeat new password' }]
+              .map(({ key, label, placeholder }) => (
+              <div key={key}>
+                <label className="font-inter text-xs text-white/40 mb-1.5 block">{label}</label>
+                <div className="relative">
+                  <FiLock size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20" />
+                  <input
+                    type={showPw[key] ? 'text' : 'password'}
+                    value={pwForm[key]}
+                    onChange={e => setPwForm(p => ({ ...p, [key]: e.target.value }))}
+                    placeholder={placeholder}
+                    className="input-field pl-10 pr-10"
+                    required
+                  />
+                  <button type="button"
+                    onClick={() => setShowPw(p => ({ ...p, [key]: !p[key] }))}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-white/20 hover:text-white/60 transition-colors">
+                    {showPw[key] ? <FiEyeOff size={14} /> : <FiEye size={14} />}
+                  </button>
+                </div>
+              </div>
+            ))}
+            <motion.button type="submit" disabled={savingPw}
+              whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
+              className="btn-primary text-xs px-6 py-2.5 disabled:opacity-60 w-full"
+              style={{ background: 'linear-gradient(135deg, #ef4444, #dc2626)' }}>
+              {savingPw ? 'Updating...' : '🔒 Update Password'}
             </motion.button>
           </form>
         </motion.div>
